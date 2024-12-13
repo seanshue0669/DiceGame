@@ -16,3 +16,4 @@ MonoBehaviour:
   - CategoryName: DiceGame
     Events:
     - {fileID: 11400000, guid: 4d1c13a5d22d9c644aafa1b812c79fea, type: 2}
+    - {fileID: 11400000, guid: 4c675300680a60e4fb2b660a4635e3e9, type: 2}

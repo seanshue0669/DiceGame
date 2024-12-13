@@ -9,7 +9,8 @@ public class DiceGameListener : MonoBehaviour
     private void Start()
     {
         EventSystem.Instance.RegisterCallBack<string, string>("DiceGame", "Options", ProcessDiceGameEvent);
-
+        
+        EventSystem.Instance.RegisterEvent<int>("Dosomthing", "rotate", Test);
     }
 
     private async void Update()
@@ -39,5 +40,13 @@ public class DiceGameListener : MonoBehaviour
         await Task.Delay(100);
         return data;
     }
+    private void Test(int angle)
+    {
+        //Rotation
+        //add logic<---
+        //
 
+        //Stop at xxx 
+        //Debug.Log($"Rotate {angle} deg");
+    }
 }

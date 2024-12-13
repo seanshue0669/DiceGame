@@ -1,3 +1,4 @@
+using NUnit.Framework.Internal;
 using UnityEngine;
 
 public class OnClick : MonoBehaviour
@@ -9,5 +10,6 @@ public class OnClick : MonoBehaviour
     private async void OnMouseDown()
     {
         await EventSystem.Instance.TriggerCallBack<string, string>("DiceGame", identifyer, words);
+        EventSystem.Instance.TriggerEvent("Dosomthing", "rotate", 90);
     }
 }

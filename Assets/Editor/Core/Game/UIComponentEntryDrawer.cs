@@ -53,7 +53,7 @@ public class UIComponentEntryDrawer : PropertyDrawer
                 if (inputFieldProp != null)
                 {
                     EditorGUI.PropertyField(componentRect, inputFieldProp, new GUIContent("TMP_InputField"));
-                }
+                }   
                 break;
 
             default:

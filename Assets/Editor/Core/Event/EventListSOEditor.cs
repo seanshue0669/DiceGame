@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,13 +16,15 @@ namespace EventSO
         private bool[] showIdentifiers;
         private bool showIdentifiersFoldout = false;
 
+        private List<bool> categoryFoldouts = new List<bool>();
         public override void OnInspectorGUI()
         {
             EventListSO eventList = (EventListSO)target;
 
             InitializeShowIdentifiers(eventList);
+            InitializeCategoryFoldouts(eventList);
             serializedObject.Update();
-            DrawCategories(eventList);
+            DrawCategories();
             DrawCategoryManagement(eventList);
             if (eventList.Categories.Count > 0)
             {
@@ -41,8 +44,14 @@ namespace EventSO
                 showIdentifiers = new bool[eventList.Categories.Count];
             }
         }
-
-        private void DrawCategories(EventListSO eventList)
+        private void InitializeCategoryFoldouts(EventListSO eventList)
+        {
+            if (categoryFoldouts.Count != eventList.Categories.Count)
+            {
+                categoryFoldouts = new List<bool>(new bool[eventList.Categories.Count]);
+            }
+        }
+        private void DrawCategories()
         {
             SerializedProperty categories = serializedObject.FindProperty("Categories");
             EditorGUI.indentLevel++;
@@ -55,8 +64,12 @@ namespace EventSO
                 SerializedProperty events = category.FindPropertyRelative("Events");
 
                 EditorGUILayout.BeginVertical("box");
-                EditorGUILayout.LabelField(categoryName.stringValue, EditorStyles.boldLabel);
-                DrawEvents(events);
+                categoryFoldouts[i] = EditorGUILayout.Foldout(categoryFoldouts[i], categoryName.stringValue, true);
+
+                if (categoryFoldouts[i])
+                {
+                    DrawEvents(events);
+                }
 
                 EditorGUILayout.EndVertical();
             }
@@ -111,6 +124,7 @@ namespace EventSO
                 if (!string.IsNullOrEmpty(newCategoryName))
                 {
                     eventList.AddCategory(newCategoryName);
+                    categoryFoldouts.Add(false);
                     newCategoryName = "";
                     EditorUtility.SetDirty(eventList);
                 }
@@ -143,6 +157,7 @@ namespace EventSO
                     }
 
                     eventList.RemoveCategory(categoryNames[selectedCategoryIndex]);
+                    categoryFoldouts.RemoveAt(selectedCategoryIndex);
                     selectedCategoryIndex = 0;
                     EditorUtility.SetDirty(eventList);
                 }
